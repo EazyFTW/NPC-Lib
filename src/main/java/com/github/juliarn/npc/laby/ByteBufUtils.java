@@ -34,15 +34,6 @@ public final class ByteBufUtils {
         byteBuf.writeBytes(values);
     }
 
-    @NotNull
-    public static String readString(@NotNull ByteBuf byteBuf) {
-        int integer = readVarInt(byteBuf);
-        byte[] buffer = new byte[integer];
-        byteBuf.readBytes(buffer, 0, integer);
-
-        return new String(buffer, StandardCharsets.UTF_8);
-    }
-
     public static void writeVarInt(@NotNull ByteBuf byteBuf, int value) {
         do {
             byte temp = (byte) (value & 0b01111111);
@@ -52,23 +43,5 @@ public final class ByteBufUtils {
             }
             byteBuf.writeByte(temp);
         } while (value != 0);
-    }
-
-    public static int readVarInt(@NotNull ByteBuf byteBuf) {
-        int numRead = 0;
-        int result = 0;
-        byte read;
-        do {
-            read = byteBuf.readByte();
-            int value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
-
-            numRead++;
-            if (numRead > 5) {
-                throw new RuntimeException("VarInt is too big");
-            }
-        } while ((read & 0b10000000) != 0);
-
-        return result;
     }
 }
