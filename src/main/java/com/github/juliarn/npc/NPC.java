@@ -194,7 +194,8 @@ public class NPC {
         }
 
         /**
-         * Sets a custom uuid for the NPC instead of generating a random one
+         * Sets a custom uuid for the NPC instead of generating a random one.
+         * This breaks the compatibility of the npc with labymod emotes.
          *
          * @param uuid the uuid the NPC should have
          * @return this builder instance
