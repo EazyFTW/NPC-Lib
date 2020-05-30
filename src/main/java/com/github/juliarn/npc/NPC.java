@@ -117,6 +117,15 @@ public class NPC {
         return new MetadataModifier(this);
     }
 
+    /**
+     * Creates a new LabyMod modifier which serves methods to play LabyMod actions on an NPC.
+     *
+     * @return a LabyMod modifier modifying this NPC
+     */
+    public LabyModModifier labymod() {
+        return new LabyModModifier(this);
+    }
+
     @NotNull
     public WrappedGameProfile getGameProfile() {
         return gameProfile;

@@ -76,8 +76,6 @@ public class NPCModifier {
                 exception.printStackTrace();
             }
         }
-
-        this.packetContainers.clear();
     }
 
 }
