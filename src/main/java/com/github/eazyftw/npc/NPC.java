@@ -1,9 +1,9 @@
-package com.github.juliarn.npc;
+package com.github.eazyftw.npc;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
-import com.github.juliarn.npc.modifier.*;
-import com.github.juliarn.npc.profile.Profile;
+import com.github.eazyftw.npc.modifier.*;
+import com.github.eazyftw.npc.profile.Profile;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -100,12 +100,21 @@ public class NPC {
     }
 
     /**
-     * Creates a new equipemt modifier which serves methods to change an NPCs equipment
+     * Creates a new equipment modifier which serves methods to change an NPCs equipment
      *
      * @return an equipment modifier modifying this NPC
      */
     public EquipmentModifier equipment() {
         return new EquipmentModifier(this);
+    }
+
+    /**
+     * Creates a new hologram modifier which serves methods to change an NPCs hologram
+     *
+     * @return an hologram modifier modifying this NPC
+     */
+    public HologramModifier hologram() {
+        return new HologramModifier(this);
     }
 
     /**
@@ -146,7 +155,6 @@ public class NPC {
     public void setImitatePlayer(boolean imitatePlayer) {
         this.imitatePlayer = imitatePlayer;
     }
-
 
     public static class Builder {
 
@@ -223,9 +231,7 @@ public class NPC {
          */
         @NotNull
         public NPC build(@NotNull NPCPool pool) {
-            if (!this.profile.isComplete()) {
-                throw new IllegalStateException("The provided profile has to be complete!");
-            }
+            if (!this.profile.isComplete()) throw new IllegalStateException("The provided profile has to be complete!");
 
             NPC npc = new NPC(
                     this.profile.asWrapped(),
@@ -238,7 +244,5 @@ public class NPC {
 
             return npc;
         }
-
     }
-
 }

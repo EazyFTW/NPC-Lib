@@ -1,11 +1,10 @@
-package com.github.juliarn.npc.modifier;
-
+package com.github.eazyftw.npc.modifier;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
-import com.github.juliarn.npc.NPC;
+import com.github.eazyftw.npc.NPC;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -56,11 +55,53 @@ public class MetadataModifier extends NPCModifier {
 
     public static class EntityMetadata<I, O> {
 
+        public static final EntityMetadata<Boolean, Byte> ON_FIRE = new EntityMetadata<>(
+                0,
+                Byte.class,
+                Collections.emptyList(),
+                input -> (byte) (input ? 0x01 : 0)
+        );
+
         public static final EntityMetadata<Boolean, Byte> SNEAKING = new EntityMetadata<>(
                 0,
                 Byte.class,
                 Collections.emptyList(),
                 input -> (byte) (input ? 0x02 : 0)
+        );
+
+        public static final EntityMetadata<Boolean, Byte> SPRINTING = new EntityMetadata<>(
+                0,
+                Byte.class,
+                Collections.emptyList(),
+                input -> (byte) (input ? 0x08 : 0)
+        );
+
+        public static final EntityMetadata<Boolean, Byte> SWIMMING = new EntityMetadata<>(
+                0,
+                Byte.class,
+                Collections.emptyList(),
+                input -> (byte) (input ? 0x10 : 0)
+        );
+
+        public static final EntityMetadata<Boolean, Byte> INVISIBLE = new EntityMetadata<>(
+                0,
+                Byte.class,
+                Collections.emptyList(),
+                input -> (byte) (input ? 0x20 : 0)
+        );
+
+        public static final EntityMetadata<Boolean, Byte> GLOWING = new EntityMetadata<>(
+                0,
+                Byte.class,
+                Collections.emptyList(),
+                input -> (byte) (input ? 0x40 : 0)
+        );
+
+        public static final EntityMetadata<Boolean, Byte> FLYING_ELYTRA = new EntityMetadata<>(
+                0,
+                Byte.class,
+                Collections.emptyList(),
+                input -> (byte) (input ? 0x80 : 0)
         );
 
         public static final EntityMetadata<Boolean, Byte> SKIN_LAYERS = new EntityMetadata<>(
@@ -69,6 +110,7 @@ public class MetadataModifier extends NPCModifier {
                 Arrays.asList(9, 9, 10, 14, 14, 15),
                 input -> (byte) (input ? 0xff : 0)
         );
+
 
         private final int baseIndex;
 
@@ -98,5 +140,4 @@ public class MetadataModifier extends NPCModifier {
         }
 
     }
-
 }

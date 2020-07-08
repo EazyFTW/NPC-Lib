@@ -1,4 +1,4 @@
-package com.github.juliarn.npc;
+package com.github.eazyftw.npc;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

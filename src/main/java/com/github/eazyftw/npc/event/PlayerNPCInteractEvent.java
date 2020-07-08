@@ -1,8 +1,7 @@
-package com.github.juliarn.npc.event;
-
+package com.github.eazyftw.npc.event;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.github.juliarn.npc.NPC;
+import com.github.eazyftw.npc.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;

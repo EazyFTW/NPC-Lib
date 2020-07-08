@@ -1,4 +1,4 @@
-package com.github.juliarn.npc.profile;
+package com.github.eazyftw.npc.profile;
 
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedSignedProperty;
@@ -32,8 +32,7 @@ public class Profile {
 
     private static final Pattern UNIQUE_ID_PATTERN = Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})");
 
-    private static final Type PROPERTY_LIST_TYPE = new TypeToken<Collection<Property>>() {
-    }.getType();
+    private static final Type PROPERTY_LIST_TYPE = new TypeToken<Collection<Property>>() {}.getType();
 
     private UUID uniqueId;
 
@@ -58,9 +57,7 @@ public class Profile {
     }
 
     public Profile(UUID uniqueId, String name, Collection<Property> properties) {
-        if (name == null && uniqueId == null) {
-            throw new IllegalArgumentException("Either name or uniqueId has to be given!");
-        }
+        if (name == null && uniqueId == null) throw new IllegalArgumentException("Either name or uniqueId has to be given!");
 
         this.uniqueId = uniqueId;
         this.name = name;
@@ -97,9 +94,7 @@ public class Profile {
      * @return if the profile was successfully completed
      */
     public boolean complete(boolean propertiesAndName) {
-        if (this.isComplete() && this.hasProperties()) {
-            return true;
-        }
+        if (this.isComplete() && this.hasProperties()) return true;
 
         if (this.uniqueId == null) {
             RequestBuilder builder = RequestBuilder
@@ -110,11 +105,9 @@ public class Profile {
                     .accepts(MimeTypes.getMimeType("json"));
 
             try (RequestResult requestResult = builder.fireAndForget()) {
-                if (requestResult.getStatus() != StatusCode.OK) {
-                    return false;
-                }
+                if (requestResult.getStatus() != StatusCode.OK) return false;
 
-                JsonElement jsonElement = JsonParser.parseString(requestResult.getResultAsString());
+                JsonElement jsonElement = new JsonParser().parse(requestResult.getResultAsString());
 
                 if (jsonElement.isJsonObject()) {
                     JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -141,11 +134,9 @@ public class Profile {
                     .accepts(MimeTypes.getMimeType("json"));
 
             try (RequestResult requestResult = builder.fireAndForget()) {
-                if (requestResult.getStatus() != StatusCode.OK) {
-                    return false;
-                }
+                if (requestResult.getStatus() != StatusCode.OK) return false;
 
-                JsonElement jsonElement = JsonParser.parseString(requestResult.getResultAsString());
+                JsonElement jsonElement = new JsonParser().parse(requestResult.getResultAsString());
 
                 if (jsonElement.isJsonObject()) {
                     JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -205,9 +196,7 @@ public class Profile {
     public WrappedGameProfile asWrapped(boolean withProperties) {
         WrappedGameProfile profile = new WrappedGameProfile(this.getUniqueId(), this.getName());
 
-        if (withProperties) {
-            this.getProperties().forEach(property -> profile.getProperties().put(property.name, property.asWrapped()));
-        }
+        if (withProperties) this.getProperties().forEach(property -> profile.getProperties().put(property.name, property.asWrapped()));
 
         return profile;
     }
@@ -249,7 +238,5 @@ public class Profile {
         public WrappedSignedProperty asWrapped() {
             return new WrappedSignedProperty(this.getName(), this.getValue(), this.getSignature());
         }
-
     }
-
 }

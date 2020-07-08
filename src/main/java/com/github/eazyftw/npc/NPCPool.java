@@ -1,4 +1,4 @@
-package com.github.juliarn.npc;
+package com.github.eazyftw.npc;
 
 
 import com.comphenix.protocol.PacketType;
@@ -7,9 +7,9 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.github.juliarn.npc.event.PlayerNPCInteractEvent;
-import com.github.juliarn.npc.modifier.AnimationModifier;
-import com.github.juliarn.npc.modifier.MetadataModifier;
+import com.github.eazyftw.npc.event.PlayerNPCInteractEvent;
+import com.github.eazyftw.npc.modifier.AnimationModifier;
+import com.github.eazyftw.npc.modifier.MetadataModifier;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
@@ -93,7 +93,6 @@ public class NPCPool implements Listener {
                             ));
                 }
             }
-
         });
     }
 
@@ -101,9 +100,7 @@ public class NPCPool implements Listener {
         Bukkit.getScheduler().runTaskTimerAsynchronously(this.javaPlugin, () -> {
             for (Player player : ImmutableList.copyOf(Bukkit.getOnlinePlayers())) {
                 for (NPC npc : this.npcMap.values()) {
-                    if (!npc.getLocation().getWorld().equals(player.getLocation().getWorld())) {
-                        continue;
-                    }
+                    if (!npc.getLocation().getWorld().equals(player.getLocation().getWorld())) continue;
 
                     double distance = npc.getLocation().distanceSquared(player.getLocation());
 
@@ -154,7 +151,7 @@ public class NPCPool implements Listener {
 
         this.npcMap.values().stream()
                 .filter(npc -> npc.isImitatePlayer() && npc.isShownFor(player) && npc.getLocation().distanceSquared(player.getLocation()) <= this.actionDistance)
-                .forEach(npc -> npc.metadata().queue(MetadataModifier.EntityMetadata.SNEAKING, event.isSneaking()).send(player));
+                .forEach(npc -> npc.metadata().queue(MetadataModifier.EntityMetadata.SPRINTING, event.isSneaking()).send(player));
     }
 
     @EventHandler

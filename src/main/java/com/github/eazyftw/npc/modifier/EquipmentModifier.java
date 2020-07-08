@@ -1,10 +1,9 @@
-package com.github.juliarn.npc.modifier;
-
+package com.github.eazyftw.npc.modifier;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.github.juliarn.npc.NPC;
+import com.github.eazyftw.npc.NPC;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,5 +30,4 @@ public class EquipmentModifier extends NPCModifier {
 
         return this;
     }
-
 }

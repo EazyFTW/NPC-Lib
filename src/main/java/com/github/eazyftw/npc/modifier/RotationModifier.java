@@ -1,9 +1,8 @@
-package com.github.juliarn.npc.modifier;
-
+package com.github.eazyftw.npc.modifier;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
-import com.github.juliarn.npc.NPC;
+import com.github.eazyftw.npc.NPC;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,5 +55,4 @@ public class RotationModifier extends NPCModifier {
 
         return this.queueRotate(yaw, pitch);
     }
-
 }

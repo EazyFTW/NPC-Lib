@@ -1,10 +1,9 @@
-package com.github.juliarn.npc.modifier;
-
+package com.github.eazyftw.npc.modifier;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
-import com.github.juliarn.npc.NPC;
+import com.github.eazyftw.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -35,9 +34,7 @@ public class NPCModifier {
     protected PacketContainer newContainer(@NotNull PacketType packetType, boolean withEntityId) {
         PacketContainer packetContainer = new PacketContainer(packetType);
 
-        if (withEntityId) {
-            packetContainer.getIntegers().write(0, this.npc.getEntityId());
-        }
+        if (withEntityId) packetContainer.getIntegers().write(0, this.npc.getEntityId());
         this.packetContainers.add(packetContainer);
 
         return packetContainer;
@@ -48,9 +45,7 @@ public class NPCModifier {
     }
 
     protected PacketContainer lastContainer(PacketContainer def) {
-        if (this.packetContainers.isEmpty()) {
-            return def;
-        }
+        if (this.packetContainers.isEmpty()) return def;
         return this.lastContainer();
     }
 
@@ -79,5 +74,4 @@ public class NPCModifier {
 
         this.packetContainers.clear();
     }
-
 }

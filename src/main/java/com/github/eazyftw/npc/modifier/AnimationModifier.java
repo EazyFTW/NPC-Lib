@@ -1,8 +1,7 @@
-package com.github.juliarn.npc.modifier;
-
+package com.github.eazyftw.npc.modifier;
 
 import com.comphenix.protocol.PacketType;
-import com.github.juliarn.npc.NPC;
+import com.github.eazyftw.npc.NPC;
 import org.jetbrains.annotations.NotNull;
 
 public class AnimationModifier extends NPCModifier {
@@ -12,7 +11,7 @@ public class AnimationModifier extends NPCModifier {
     }
 
     public AnimationModifier queue(@NotNull EntityAnimation entityAnimation) {
-        return this.queue(entityAnimation.id);
+        return this.queue(entityAnimation.ordinal());
     }
 
     public AnimationModifier queue(int animationId) {
@@ -21,19 +20,14 @@ public class AnimationModifier extends NPCModifier {
     }
 
     public enum EntityAnimation {
-        SWING_MAIN_ARM(0),
-        TAKE_DAMAGE(1),
-        LEAVE_BED(2),
-        SWING_OFF_HAND(3),
-        CRITICAL_EFFECT(4),
-        MAGIC_CRITICAL_EFFECT(5);
 
-        private final int id;
-
-        EntityAnimation(int id) {
-            this.id = id;
-        }
+        //DO NOT CHANGE ORDER
+        SWING_MAIN_ARM,
+        TAKE_DAMAGE,
+        LEAVE_BED,
+        SWING_OFF_HAND,
+        CRITICAL_EFFECT,
+        MAGIC_CRITICAL_EFFECT;
 
     }
-
 }

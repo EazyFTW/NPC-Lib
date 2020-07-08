@@ -1,5 +1,4 @@
-package com.github.juliarn.npc.modifier;
-
+package com.github.eazyftw.npc.modifier;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
@@ -7,7 +6,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import com.github.juliarn.npc.NPC;
+import com.github.eazyftw.npc.NPC;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -59,9 +58,7 @@ public class VisibilityModifier extends NPCModifier {
                 .write(0, (byte) (super.npc.getLocation().getYaw() * 256F / 360F))
                 .write(1, (byte) (super.npc.getLocation().getPitch() * 256F / 360F));
 
-        if (MINECRAFT_VERSION < 15) {
-            packetContainer.getDataWatcherModifier().write(0, new WrappedDataWatcher());
-        }
+        if (MINECRAFT_VERSION < 15) packetContainer.getDataWatcherModifier().write(0, new WrappedDataWatcher());
 
         return this;
     }
@@ -71,5 +68,4 @@ public class VisibilityModifier extends NPCModifier {
         packetContainer.getIntegerArrays().write(0, new int[]{super.npc.getEntityId()});
         return this;
     }
-
 }
