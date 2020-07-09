@@ -10,9 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class NPC {
@@ -24,6 +22,8 @@ public class NPC {
     private final int entityId = RANDOM.nextInt(Short.MAX_VALUE);
 
     private final WrappedGameProfile gameProfile;
+
+    protected final Set<UUID> hasTeamRegistered = new HashSet<>();
 
     private final Location location;
 
@@ -48,6 +48,7 @@ public class NPC {
         this.seeingPlayers.add(player);
 
         VisibilityModifier visibilityModifier = new VisibilityModifier(this);
+        if(hasTeamRegistered.add(this.gameProfile.getUUID())) visibilityModifier.queuePlayerTeamChange();
         visibilityModifier.queuePlayerListChange(EnumWrappers.PlayerInfoAction.ADD_PLAYER).send(player);
 
         Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
@@ -178,11 +179,25 @@ public class NPC {
 
         /**
          * Creates a new instance of the NPC builder
-         *
-         * @param profile a player profile defining UUID, name and textures of the NPC
          */
-        public Builder(@NotNull Profile profile) {
-            this.profile = profile;
+        public Builder() {
+            UUID uuid = new UUID(new Random().nextLong(), 0);
+            String name = uuid.toString().replace("-", "").substring(0, 10);
+            this.profile = new Profile(uuid, name, new HashSet<>());
+        }
+
+        /**
+         * Creates a new instance of the NPC builder
+         *
+         * @param value     value texture
+         * @param signature signature texture
+         */
+        public Builder(@NotNull String value, String signature) {
+            UUID uuid = new UUID(new Random().nextLong(), 0);
+            String name = uuid.toString().replace("-", "").substring(0, 10);
+            Collection<Profile.Property> properties = new HashSet<>();
+            properties.add(new Profile.Property("textures", value, signature));
+            this.profile = new Profile(uuid, name, properties);
         }
 
         /**

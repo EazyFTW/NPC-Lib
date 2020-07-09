@@ -7,6 +7,7 @@ import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.github.eazyftw.npc.NPC;
+import com.github.eazyftw.npc.wrappers.WrapperPlayServerScoreboardTeam;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -26,9 +27,31 @@ public class VisibilityModifier extends NPCModifier {
                 super.npc.getGameProfile(),
                 20,
                 EnumWrappers.NativeGameMode.NOT_SET,
-                WrappedChatComponent.fromText("")
+                (action == EnumWrappers.PlayerInfoAction.REMOVE_PLAYER ? WrappedChatComponent.fromJson("{\"text\":\"[NPC] " + super.npc.getGameProfile().getName() + "\",\"color\":\"dark_gray\"}") : WrappedChatComponent.fromText(""))
         );
         packetContainer.getPlayerInfoDataLists().write(0, Collections.singletonList(playerInfoData));
+
+        return this;
+    }
+
+    public VisibilityModifier queuePlayerTeamChange() {
+        WrapperPlayServerScoreboardTeam wrapperSBT = new WrapperPlayServerScoreboardTeam(super.newContainer(PacketType.Play.Server.SCOREBOARD_TEAM));
+
+        wrapperSBT.setName(this.npc.getGameProfile().getName());
+        wrapperSBT.setDisplayName(WrappedChatComponent.fromText(this.npc.getGameProfile().getName()));
+        wrapperSBT.setCollisionRule("never");
+        wrapperSBT.setNameTagVisibility("never");
+        wrapperSBT.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);
+        wrapperSBT.setPlayers(Collections.singletonList(this.npc.getGameProfile().getName()));
+
+        return this;
+    }
+
+    public VisibilityModifier queuePlayerTeamDelete() {
+        WrapperPlayServerScoreboardTeam wrapperSBT = new WrapperPlayServerScoreboardTeam(super.newContainer(PacketType.Play.Server.SCOREBOARD_TEAM));
+
+        wrapperSBT.setName(this.npc.getGameProfile().getName());
+        wrapperSBT.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_REMOVED);
 
         return this;
     }

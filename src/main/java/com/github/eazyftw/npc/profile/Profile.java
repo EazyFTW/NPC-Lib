@@ -40,6 +40,10 @@ public class Profile {
 
     private Collection<Property> properties;
 
+    public Profile() {
+        this(UUID.randomUUID(), null);
+    }
+
     public Profile(@NotNull UUID uniqueId) {
         this(uniqueId, null);
     }
