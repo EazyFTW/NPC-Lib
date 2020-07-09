@@ -77,7 +77,6 @@ public class NPCPool implements Listener {
 
     private void addInteractListener() {
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this.javaPlugin, PacketType.Play.Client.USE_ENTITY) {
-
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 PacketContainer packetContainer = event.getPacket();
@@ -88,9 +87,8 @@ public class NPCPool implements Listener {
                     EnumWrappers.EntityUseAction action = packetContainer.getEntityUseActions().read(0);
 
                     Bukkit.getScheduler().runTask(javaPlugin, () ->
-                            Bukkit.getPluginManager().callEvent(
-                                    new PlayerNPCInteractEvent(event.getPlayer(), npc, action)
-                            ));
+                        Bukkit.getPluginManager().callEvent(new PlayerNPCInteractEvent(event.getPlayer(), npc, action)
+                   ));
                 }
             }
         });
@@ -106,8 +104,10 @@ public class NPCPool implements Listener {
 
                     if (distance >= this.spawnDistance && npc.isShownFor(player)) {
                         npc.hide(player);
+                        npc.hologram().getHologram().show(player);
                     } else if (distance <= this.spawnDistance && !npc.isShownFor(player)) {
                         npc.show(player, this.javaPlugin, this.tabListRemoveTicks);
+                        npc.hologram().getHologram().hide(player);
                     }
 
                     if (npc.isLookAtPlayer() && distance <= this.actionDistance) {

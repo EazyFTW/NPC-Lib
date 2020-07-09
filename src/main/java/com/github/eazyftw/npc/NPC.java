@@ -33,6 +33,8 @@ public class NPC {
 
     private final SpawnCustomizer spawnCustomizer;
 
+    private HologramModifier hologramModifier;
+
     private NPC(WrappedGameProfile gameProfile, Location location, boolean lookAtPlayer, boolean imitatePlayer, SpawnCustomizer spawnCustomizer) {
         this.gameProfile = gameProfile;
 
@@ -114,7 +116,12 @@ public class NPC {
      * @return an hologram modifier modifying this NPC
      */
     public HologramModifier hologram() {
-        return new HologramModifier(this);
+        if(this.hologramModifier == null) {
+            this.hologramModifier = new HologramModifier(this);
+            return this.hologramModifier;
+        } else {
+            return this.hologramModifier;
+        }
     }
 
     /**
