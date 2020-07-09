@@ -104,10 +104,10 @@ public class NPCPool implements Listener {
 
                     if (distance >= this.spawnDistance && npc.isShownFor(player)) {
                         npc.hide(player);
-                        npc.hologram().getHologram().show(player);
+                        npc.hologram().getHologram().hide(player);
                     } else if (distance <= this.spawnDistance && !npc.isShownFor(player)) {
                         npc.show(player, this.javaPlugin, this.tabListRemoveTicks);
-                        npc.hologram().getHologram().hide(player);
+                        npc.hologram().getHologram().show(player);
                     }
 
                     if (npc.isLookAtPlayer() && distance <= this.actionDistance) {
