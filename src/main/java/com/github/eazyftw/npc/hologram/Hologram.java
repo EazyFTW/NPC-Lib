@@ -1,12 +1,14 @@
 package com.github.eazyftw.npc.hologram;
 
 import com.github.eazyftw.npc.protocol.Reflection;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Hologram {
 
@@ -79,7 +81,7 @@ public class Hologram {
     public Hologram(MinecraftVersion version, Location location, List<String> text) {
         this.version = version;
         this.start = location;
-        this.text = text;
+        this.text = text.stream().map(t -> ChatColor.translateAlternateColorCodes('&', t)).collect(Collectors.toList());;
 
         this.worldServer = Reflection.getMethod(CRAFT_WORLD_CLASS, "getHandle").invoke(location.getWorld());
 
@@ -143,7 +145,8 @@ public class Hologram {
         }
     }
 
-    public List<Object> getUpdatePackets(List<String> text) {
+    public List<Object> getUpdatePackets(List<String> txt) {
+        List<String> text = txt.stream().map(t -> ChatColor.translateAlternateColorCodes('&', t)).collect(Collectors.toList());
         List<Object> updatePackets = new ArrayList<>();
 
         if (this.text.size() != text.size()) {
@@ -181,7 +184,7 @@ public class Hologram {
     }
 
     public void setText(List<String> text) {
-        this.text = text;
+        this.text = text.stream().map(t -> ChatColor.translateAlternateColorCodes('&', t)).collect(Collectors.toList());;
     }
 
     public void update(Player player, List<Object> updatePackets) {

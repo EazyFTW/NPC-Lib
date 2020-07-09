@@ -117,12 +117,9 @@ public class NPC {
      * @return an hologram modifier modifying this NPC
      */
     public HologramModifier hologram() {
-        if(this.hologramModifier == null) {
-            this.hologramModifier = new HologramModifier(this);
-            return this.hologramModifier;
-        } else {
-            return this.hologramModifier;
-        }
+        if(this.hologramModifier == null) this.hologramModifier = new HologramModifier(this);
+
+        return this.hologramModifier;
     }
 
     /**
