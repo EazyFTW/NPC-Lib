@@ -103,7 +103,7 @@ public class NPCPool implements Listener {
                     double distance = npc.getLocation().distanceSquared(player.getLocation());
 
                     if (distance >= this.spawnDistance && npc.isShownFor(player)) {
-                        npc.hide(player);
+                        npc.hide(player, this.javaPlugin);
                         npc.hologram().getHologram().hide(player);
                     } else if (distance <= this.spawnDistance && !npc.isShownFor(player)) {
                         npc.show(player, this.javaPlugin, this.tabListRemoveTicks);
@@ -132,7 +132,7 @@ public class NPCPool implements Listener {
 
         if (npc != null) {
             this.npcMap.remove(entityId);
-            npc.getSeeingPlayers().forEach(npc::hide);
+            npc.getSeeingPlayers().forEach(p -> npc.hide(p, this.javaPlugin));
         }
     }
 
@@ -142,7 +142,10 @@ public class NPCPool implements Listener {
 
         this.npcMap.values().stream()
                 .filter(npc -> npc.isShownFor(player))
-                .forEach(npc -> npc.removeSeeingPlayer(player));
+                .forEach(npc -> {
+                    npc.hasTeamRegistered.remove(player.getUniqueId());
+                    npc.removeSeeingPlayer(player);
+                });
     }
 
     @EventHandler

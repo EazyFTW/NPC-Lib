@@ -29,6 +29,7 @@ public class VisibilityModifier extends NPCModifier {
                 EnumWrappers.NativeGameMode.NOT_SET,
                 (action == EnumWrappers.PlayerInfoAction.REMOVE_PLAYER ? WrappedChatComponent.fromJson("{\"text\":\"[NPC] " + super.npc.getGameProfile().getName() + "\",\"color\":\"dark_gray\"}") : WrappedChatComponent.fromText(""))
         );
+
         packetContainer.getPlayerInfoDataLists().write(0, Collections.singletonList(playerInfoData));
 
         return this;

@@ -2,6 +2,8 @@ package com.github.eazyftw.npc;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
+import com.github.eazyftw.npc.event.NPCHideEvent;
+import com.github.eazyftw.npc.event.NPCShowEvent;
 import com.github.eazyftw.npc.modifier.*;
 import com.github.eazyftw.npc.profile.Profile;
 import org.bukkit.Bukkit;
@@ -47,20 +49,30 @@ public class NPC {
     protected void show(@NotNull Player player, @NotNull JavaPlugin javaPlugin, long tabListRemoveTicks) {
         this.seeingPlayers.add(player);
 
+        NPCShowEvent event = new NPCShowEvent(player, this);
+        Bukkit.getScheduler().runTask(javaPlugin,  () -> Bukkit.getServer().getPluginManager().callEvent(event));
+        if(event.isCancelled()) {
+            this.seeingPlayers.remove(player);
+            return;
+        }
+
         VisibilityModifier visibilityModifier = new VisibilityModifier(this);
-        if(hasTeamRegistered.add(this.gameProfile.getUUID())) visibilityModifier.queuePlayerTeamChange();
+        if(hasTeamRegistered.add(player.getUniqueId())) visibilityModifier.queuePlayerTeamChange();
         visibilityModifier.queuePlayerListChange(EnumWrappers.PlayerInfoAction.ADD_PLAYER).send(player);
 
         Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
             visibilityModifier.queueSpawn().send(player);
             this.spawnCustomizer.handleSpawn(this, player);
 
-            // keeping the NPC longer in the player list, otherwise the skin might not be shown sometimes.
             Bukkit.getScheduler().runTaskLater(javaPlugin, () -> visibilityModifier.queuePlayerListChange(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER).send(player), tabListRemoveTicks);
         }, 10L);
     }
 
-    protected void hide(@NotNull Player player) {
+    protected void hide(@NotNull Player player, @NotNull JavaPlugin javaPlugin) {
+        NPCHideEvent event = new NPCHideEvent(player, this);
+        Bukkit.getScheduler().runTask(javaPlugin,  () -> Bukkit.getServer().getPluginManager().callEvent(event));
+        if (event.isCancelled()) return;
+
         new VisibilityModifier(this)
                 .queuePlayerListChange(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER)
                 .queueDestroy()
