@@ -27,6 +27,7 @@ import com.comphenix.protocol.reflect.IntEnum;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
+import com.github.eazyftw.npc.hologram.MinecraftVersion;
 import org.bukkit.ChatColor;
 
 public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
@@ -154,7 +155,15 @@ public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
      * @return The current Name Tag Visibility
      */
     public String getNameTagVisibility() {
-        return handle.getStrings().read(1);
+        if(MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_12_R1)) {
+            if(MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_13_R1)) {
+                return handle.getStrings().read(1);
+            } else {
+                return handle.getStrings().read(4);
+            }
+        } else {
+            return handle.getStrings().read(4);
+        }
     }
 
     /**
@@ -163,7 +172,15 @@ public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
      * @param value - new value.
      */
     public void setNameTagVisibility(String value) {
-        handle.getStrings().write(1, value);
+        if(MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_12_R1)) {
+            if(MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_13_R1)) {
+                handle.getStrings().write(1, value);
+            } else {
+                handle.getStrings().write(4, value);
+            }
+        } else {
+            handle.getStrings().write(4, value);
+        }
     }
 
     /**
@@ -192,7 +209,11 @@ public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
      * @return The current collision rule
      */
     public String getCollisionRule() {
-        return handle.getStrings().read(2);
+        if(MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_12_R1)) {
+            return handle.getStrings().read(2);
+        } else {
+            return handle.getStrings().read(5);
+        }
     }
 
     /**
@@ -200,7 +221,11 @@ public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
      * @param value - new value.
      */
     public void setCollisionRule(String value) {
-        handle.getStrings().write(2, value);
+        if(MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_12_R1)) {
+            handle.getStrings().write(2, value);
+        } else {
+            handle.getStrings().write(5, value);
+        }
     }
 
     /**
@@ -236,7 +261,11 @@ public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
      * @return The current Mode
      */
     public int getMode() {
-        return handle.getIntegers().read(0);
+        if(MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_13_R1)) {
+            return handle.getIntegers().read(0);
+        } else {
+            return handle.getIntegers().read(1);
+        }
     }
 
     /**
@@ -245,7 +274,11 @@ public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
      * @param value - new value.
      */
     public void setMode(int value) {
-        handle.getIntegers().write(0, value);
+        if(MinecraftVersion.getServersVersion().isAboveOrEqual(MinecraftVersion.V1_13_R1)) {
+            handle.getIntegers().write(0, value);
+        } else {
+            handle.getIntegers().write(1, value);
+        }
     }
 
     /**
