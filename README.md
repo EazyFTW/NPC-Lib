@@ -17,5 +17,5 @@ author: EazyFTW
 main: com.github.eazyftw.server.hub.ServerHub
 ```
 Now you're all set! You can start by creating an instance of the 
-[NPCPool](https://github.com/juliarn/NPC-Lib/blob/master/src/main/java/com/github/juliarn/npc/NPCPool.java) and the 
-[NPC.Builder](https://github.com/juliarn/NPC-Lib/blob/master/src/main/java/com/github/juliarn/npc/NPC.java).
+[NPCPool](https://github.com/EazyFTW/NPC-Lib/blob/master/src/main/java/com/github/eazyftw/npc/NPCPool.java) and the 
+[NPC.Builder](https://github.com/EazyFTW/NPC-Lib/blob/master/src/main/java/com/github/eazyftw/npc/NPC.java).
