@@ -6,7 +6,7 @@
 
     <groupId>com.github.eazyftw.npc</groupId>
     <artifactId>npc-lib</artifactId>
-    <version>2.5.1-RELEASE</version>
+    <version>2.5.2-RELEASE</version>
     <packaging>jar</packaging>
 
     <properties>

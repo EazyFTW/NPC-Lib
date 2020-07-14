@@ -6,6 +6,8 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 import com.github.eazyftw.npc.NPC;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Pose;
+import org.bukkit.event.entity.EntityPoseChangeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,6 +50,7 @@ public class MetadataModifier extends NPCModifier {
     public void send(@NotNull Player... targetPlayers) {
         PacketContainer packetContainer = super.newContainer(PacketType.Play.Server.ENTITY_METADATA);
 
+        packetContainer.getIntegers().write(0, npc.getEntityId());
         packetContainer.getWatchableCollectionModifier().write(0, this.metadata);
 
         super.send(targetPlayers);
@@ -111,6 +114,12 @@ public class MetadataModifier extends NPCModifier {
                 input -> (byte) (input ? 0xff : 0)
         );
 
+        public static final EntityMetadata<Boolean, Integer> SLEEPING = new EntityMetadata<>(
+                6,
+                Integer.class,
+                Collections.emptyList(),
+                input -> (input ? 2 : 0)
+        );
 
         private final int baseIndex;
 
@@ -138,6 +147,19 @@ public class MetadataModifier extends NPCModifier {
         public Function<I, O> getMapper() {
             return mapper;
         }
+
+    }
+
+    public enum EntityPose {
+
+        //DO NOT CHANGE ORDER
+        STANDING,
+        FALL_FLYING,
+        SLEEPING,
+        SWIMMING,
+        SPIN_ATTACK,
+        SNEAKING,
+        DYING;
 
     }
 }

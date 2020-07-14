@@ -24,9 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NPCPool implements Listener {
@@ -40,6 +38,7 @@ public class NPCPool implements Listener {
     private final long tabListRemoveTicks;
 
     private final Map<Integer, NPC> npcMap = new ConcurrentHashMap<>();
+    private final Set<UUID> delay = new HashSet<>();
 
     /**
      * Creates a new NPC pool which handles events, spawning and destruction of the NPCs for players
@@ -79,16 +78,35 @@ public class NPCPool implements Listener {
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this.javaPlugin, PacketType.Play.Client.USE_ENTITY) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
+                if(delay.contains(event.getPlayer().getUniqueId())) return;
+                delay.add(event.getPlayer().getUniqueId());
                 PacketContainer packetContainer = event.getPacket();
                 int targetId = packetContainer.getIntegers().read(0);
 
                 if (npcMap.containsKey(targetId)) {
                     NPC npc = npcMap.get(targetId);
-                    EnumWrappers.EntityUseAction action = packetContainer.getEntityUseActions().read(0);
+                    EnumWrappers.EntityUseAction actionPacket = packetContainer.getEntityUseActions().read(0);
+                    NPC.NPCAction action;
+                    if(actionPacket.name().contains("ATTACK")) {
+                        if(event.getPlayer().isSneaking()) {
+                            action = NPC.NPCAction.SHIFT_LEFT_CLICK;
+                        } else {
+                            action = NPC.NPCAction.LEFT_CLICK;
+                        }
+                    } else {
+                        if(event.getPlayer().isSneaking()) {
+                            action = NPC.NPCAction.SHIFT_RIGHT_CLICK;
+                        } else {
+                            action = NPC.NPCAction.RIGHT_CLICK;
+                        }
+                    }
 
                     Bukkit.getScheduler().runTask(javaPlugin, () ->
                         Bukkit.getPluginManager().callEvent(new PlayerNPCInteractEvent(event.getPlayer(), npc, action)
-                   ));
+                    ));
+                    Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
+                        delay.remove(event.getPlayer().getUniqueId());
+                    }, 5L);
                 }
             }
         });
@@ -104,10 +122,10 @@ public class NPCPool implements Listener {
 
                     if (distance >= this.spawnDistance && npc.isShownFor(player)) {
                         npc.hide(player, this.javaPlugin);
-                        npc.hologram().getHologram().hide(player);
+                        if(npc.hologram() != null && npc.hologram().getHologram() != null) npc.hologram().getHologram().hide(player);
                     } else if (distance <= this.spawnDistance && !npc.isShownFor(player)) {
                         npc.show(player, this.javaPlugin, this.tabListRemoveTicks);
-                        npc.hologram().getHologram().show(player);
+                        if(npc.hologram() != null && npc.hologram().getHologram() != null) npc.hologram().getHologram().show(player);
                     }
 
                     if (npc.isLookAtPlayer() && distance <= this.actionDistance) {
@@ -154,7 +172,7 @@ public class NPCPool implements Listener {
 
         this.npcMap.values().stream()
                 .filter(npc -> npc.isImitatePlayer() && npc.isShownFor(player) && npc.getLocation().distanceSquared(player.getLocation()) <= this.actionDistance)
-                .forEach(npc -> npc.metadata().queue(MetadataModifier.EntityMetadata.SPRINTING, event.isSneaking()).send(player));
+                .forEach(npc -> npc.metadata().queue(MetadataModifier.EntityMetadata.SNEAKING, event.isSneaking()).send(player));
     }
 
     @EventHandler

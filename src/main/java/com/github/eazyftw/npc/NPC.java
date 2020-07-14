@@ -198,6 +198,20 @@ public class NPC {
         /**
          * Creates a new instance of the NPC builder
          *
+         * @param id     mineskin id
+         */
+        public Builder(int id) {
+            UUID uuid = new UUID(new Random().nextLong(), 0);
+            String name = uuid.toString().replace("-", "").substring(0, 10);
+            Collection<Profile.Property> properties = new HashSet<>();
+            Profile.Property property = MineSkinFetcher.fetchSkinFromId(id);
+            if(property != null) properties.add(property);
+            this.profile = new Profile(uuid, name, properties);
+        }
+
+        /**
+         * Creates a new instance of the NPC builder
+         *
          * @param value     value texture
          * @param signature signature texture
          */
@@ -275,5 +289,14 @@ public class NPC {
 
             return npc;
         }
+    }
+
+    public enum NPCAction {
+
+        LEFT_CLICK,
+        RIGHT_CLICK,
+        SHIFT_LEFT_CLICK,
+        SHIFT_RIGHT_CLICK;
+
     }
 }

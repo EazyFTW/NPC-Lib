@@ -13,9 +13,9 @@ public class PlayerNPCInteractEvent extends PlayerEvent {
 
     private final NPC npc;
 
-    private final EnumWrappers.EntityUseAction action;
+    private final NPC.NPCAction action;
 
-    public PlayerNPCInteractEvent(@NotNull Player who, @NotNull NPC npc, @NotNull EnumWrappers.EntityUseAction action) {
+    public PlayerNPCInteractEvent(@NotNull Player who, @NotNull NPC npc, @NotNull NPC.NPCAction action) {
         super(who);
         this.npc = npc;
         this.action = action;
@@ -32,7 +32,7 @@ public class PlayerNPCInteractEvent extends PlayerEvent {
     }
 
     @NotNull
-    public EnumWrappers.EntityUseAction getAction() {
+    public NPC.NPCAction getAction() {
         return action;
     }
 
